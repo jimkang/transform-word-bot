@@ -1,0 +1,14 @@
+[Unit]
+Description=improvebot
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/node /opt/transform-word-bot/transform-word-bot-responder.js improvebot
+Restart=always
+User=bot
+Group=bot
+Environment=PATH=/usr/bin:/usr/local/bin
+WorkingDirectory=/opt/transform-word-bot
+
+[Install]
+WantedBy=multi-user.target
