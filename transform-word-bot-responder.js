@@ -25,7 +25,7 @@ var createWordnok = require('wordnok').createWordnok;
 var shouldReplyToTweet = require('./should-reply-to-tweet');
 var GetWord2VecNeighbors = require('get-w2v-google-news-neighbors');
 var nounfinder = require('nounfinder');
-var getWorthwhileWordsFromText = require('./get-worthwhile-words-from-text');
+var getRarestWordFromText = require('./get-rarest-word-from-text');
 var addWordTableDef = require('./' + configName + '/add-word-table-def');
 var formatMessage = require('./' + configName + '/format-message');
 
@@ -71,7 +71,8 @@ function respondToTweet(tweet) {
   async.waterfall(
     [
       checkIfWeShouldReply,
-      getNeighborsForTweetWords,
+      getTransformee,
+      getNeighbors,
       pickNeighbors,
       composeMessage,
       postTweet,
@@ -90,9 +91,12 @@ function respondToTweet(tweet) {
     shouldReplyToTweet(opts, done);
   }
 
-  function getNeighborsForTweetWords(done) {
-    var textWords = getWorthwhileWordsFromText(tweet.text);
-    transformee = probable.pickFromArray(textWords);
+  function getTransformee(done) {
+    getRarestWordFromText({wordnok: wordnok, text: tweet.text}, done);
+  }
+
+  function getNeighbors(rarestWord, done) {
+    transformee = rarestWord;
     var words = [addWordTable.roll(), transformee];
     // console.log('words', words);
     getWord2VecNeighbors(words, done);
