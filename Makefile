@@ -1,4 +1,3 @@
-PROJECTNAME = magic-applier
 HOMEDIR = $(shell pwd)
 USER = bot
 PRIVUSER = root
