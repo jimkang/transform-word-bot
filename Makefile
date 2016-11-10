@@ -6,8 +6,8 @@ SSHCMD = ssh $(USER)@$(SERVER)
 PRIVSSHCMD = ssh $(PRIVUSER)@$(SERVER)
 APPDIR = /opt/transform-word-bot
 
-pushall: sync restart-remote
-	git push origin master
+pushall:
+	make sync && PROJECTNAME=improvebot make update-remote && PROJECTNAME=magic-applier make update-remote && git push origin master
 
 sync:
 	rsync -a $(HOMEDIR) $(USER)@$(SERVER):/opt/ --exclude node_modules/ --exclude data/
