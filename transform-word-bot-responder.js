@@ -103,12 +103,17 @@ function respondToTweet(tweet) {
       callNextTick(done, new Error('No neighbors found.'));
     }
     else {
+      neighbors = neighbors.filter(doesNotContainTransformee);
       var picked = neighbors[0];
       if (probable.rollDie(2) === 0) {
         picked = probable.pickFromArray(neighbors);
       }
       callNextTick(done, null, picked);
     }
+  }
+
+  function doesNotContainTransformee(word) {
+    return word.indexOf(transformee) === -1;
   }
 
   function composeMessage(transformed, done) {
