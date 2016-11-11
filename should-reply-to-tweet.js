@@ -2,9 +2,6 @@ var callNextTick = require('call-next-tick');
 var betterKnowATweet = require('better-know-a-tweet');
 var async = require('async');
 var behavior = require('./behavior');
-var EphemeralReplyCounter = require('./ephemeral-reply-counter');
-
-  var replyCounter = EphemeralReplyCounter({expirationTimeInSeconds: 5 * 60});
 
 // Passes an error if you should not reply.
 function shouldReplyToTweet(opts, done) {
@@ -12,11 +9,13 @@ function shouldReplyToTweet(opts, done) {
   var chronicler;
   var waitingPeriod;
   var config;
+  var recentReplyCounter;
 
   if (opts) {
     tweet = opts.tweet;
     chronicler = opts.chronicler;
     config = opts.config;
+    recentReplyCounter = opts.recentReplyCounter;
   }
 
   // var tweetLocale = 'en';
@@ -47,8 +46,18 @@ function shouldReplyToTweet(opts, done) {
     waitingPeriod = behavior.secondsToWaitBetweenChimeIns;
   }
   else if (tweetMentionsBot) {
-    // Replying.
-    waitingPeriod = behavior.secondsToWaitBetweenRepliesToSameUser;
+    if (recentReplyCounter.getCountForKey(tweet.user.screen_name) >=
+      behavior.maxRepliesInCounterLifetime) {
+
+      callNextTick(
+        done, new Error('Already replied enough recently to ' + tweet.user.screen_name)
+      );
+      return;
+    }
+    else {
+      // Probably replying.
+      waitingPeriod = behavior.secondsToWaitBetweenRepliesToSameUser;
+    }
   }
   else {
     callNextTick(done, new Error('Not chiming in or replying.'));

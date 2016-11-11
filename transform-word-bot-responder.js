@@ -25,6 +25,8 @@ var createWordnok = require('wordnok').createWordnok;
 var shouldReplyToTweet = require('./should-reply-to-tweet');
 var getRarestWordFromText = require('./get-rarest-word-from-text');
 var GetTransformationText = require('./get-transformation-text');
+var EphemeralReplyCounter = require('./ephemeral-reply-counter');
+var behavior = require('./behavior');
 
 var seed = (new Date()).toISOString();
 console.log('seed:', seed);
@@ -47,6 +49,10 @@ var getTransformationText = GetTransformationText({
 
 var chronicler = createChronicler({
   dbLocation: __dirname + '/data/' + configName + '-chronicler.db'
+});
+
+var recentReplyCounter = EphemeralReplyCounter({
+  expirationTimeInSeconds: behavior.counterExpirationSeconds
 });
 
 var twit = new Twit(config.twitter);
@@ -73,6 +79,7 @@ function respondToTweet(tweet) {
     var opts = {
       tweet: tweet,
       chronicler: chronicler,
+      recentReplyCounter: recentReplyCounter,
       config: config
     };
     // console.log('Checking tweet from', tweet.user.screen_name);
@@ -106,6 +113,7 @@ function respondToTweet(tweet) {
 
   // TODO: All of these async tasks should have just (opts, done) params.
   function recordThatReplyHappened(closingTweetData, response, done) {
+    recentReplyCounter.incrementForKey(tweet.user.screen_name);
     // TODO: recordThatUserWasRepliedTo should be async.
     chronicler.recordThatUserWasRepliedTo(tweet.user.id_str);
     callNextTick(done);

@@ -44,6 +44,7 @@ function ActualReplyCounter() {
   }
 
   function getCountForKey(key) {
+    // console.log(JSON.stringify(countsForKeys, null, '  '));
     return key in countsForKeys ? countsForKeys[key] : 0;
   }
 
