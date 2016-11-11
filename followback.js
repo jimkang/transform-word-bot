@@ -1,15 +1,19 @@
 var filteredFollowback = require('filtered-followback');
-var config = require('./config/config.js');
+
+var configName;
+
+if (process.argv.length > 2) {
+  configName = process.argv[2];
+}
+
+var config = require('./config/' + configName + '-config');
 
 filteredFollowback(
   {
     twitterCreds: config.twitter,
     neverUnfollow: [
-      3247937115,
-      3158440414,
-      3257074863,
-      2882218444,
-      3755520987
+      '724041937901228000', // magicapplier
+      '3236234039', // atyrannyofwords
     ]
   },
   reportResults
