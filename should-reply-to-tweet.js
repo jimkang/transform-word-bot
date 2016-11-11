@@ -41,11 +41,11 @@ function shouldReplyToTweet(opts, done) {
 
   if (!tweetMentionsBot) {
     // Chiming in.
-    waitingPeriod = behavior.hoursToWaitBetweenChimeIns;
+    waitingPeriod = behavior.secondsToWaitBetweenChimeIns;
   }
   else if (tweetMentionsBot) {
     // Replying.
-    waitingPeriod = behavior.hoursToWaitBetweenRepliesToSameUser;
+    waitingPeriod = behavior.secondsToWaitBetweenRepliesToSameUser;
   }
   else {
     callNextTick(done, new Error('Not chiming in or replying.'));
@@ -84,14 +84,14 @@ function shouldReplyToTweet(opts, done) {
     if (typeof date !== 'object') {
       date = new Date(date);
     }
-    var hoursElapsed = (Date.now() - date.getTime()) / (60 * 60 * 1000);
+    var secondsElapsed = (Date.now() - date.getTime()) / 1000;
 
-    if (hoursElapsed > waitingPeriod) {
+    if (secondsElapsed > waitingPeriod) {
       done();
     }
     else {
       done(new Error(
-        `Replied ${hoursElapsed} hours ago to ${tweet.user.screen_name}.
+        `Replied ${secondsElapsed} seconds ago to ${tweet.user.screen_name}.
         Need at least ${waitingPeriod} to pass.`
       ));
     }
