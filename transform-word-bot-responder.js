@@ -23,11 +23,8 @@ var seedrandom = require('seedrandom');
 var createProbable = require('probable').createProbable;
 var createWordnok = require('wordnok').createWordnok;
 var shouldReplyToTweet = require('./should-reply-to-tweet');
-var GetWord2VecNeighbors = require('get-w2v-google-news-neighbors');
-var nounfinder = require('nounfinder');
 var getRarestWordFromText = require('./get-rarest-word-from-text');
-var addWordTableDef = require('./' + configName + '/add-word-table-def');
-var formatMessage = require('./' + configName + '/format-message');
+var GetTransformationText = require('./get-transformation-text');
 
 var seed = (new Date()).toISOString();
 console.log('seed:', seed);
@@ -41,21 +38,16 @@ var wordnok = createWordnok({
   apiKey: config.wordnikAPIKey
 });
 
-var getWord2VecNeighbors = GetWord2VecNeighbors({
+var getTransformationText = GetTransformationText({
+  configName: configName,
   gnewsWord2VecURL: config.gnewsWord2VecURL,
-  nounfinder: nounfinder,
   probable: probable,
-  wordnok: wordnok,
-  nounLikePhrasesOnly: false,
-  nounWordsOnly: false,
-  doNotSample: true
+  wordnok: wordnok
 });
 
 var chronicler = createChronicler({
   dbLocation: __dirname + '/data/' + configName + '-chronicler.db'
 });
-
-var addWordTable = probable.createTableFromSizes(addWordTableDef);
 
 var twit = new Twit(config.twitter);
 var streamOpts = {
@@ -66,15 +58,11 @@ var stream = twit.stream('user', streamOpts);
 stream.on('tweet', respondToTweet);
 
 function respondToTweet(tweet) {
-  var transformee;
-
   async.waterfall(
     [
       checkIfWeShouldReply,
       getTransformee,
-      getNeighbors,
-      pickNeighbors,
-      composeMessage,
+      getTransformationText,
       postTweet,
       recordThatReplyHappened
     ],
@@ -93,35 +81,6 @@ function respondToTweet(tweet) {
 
   function getTransformee(done) {
     getRarestWordFromText({wordnok: wordnok, text: tweet.text}, done);
-  }
-
-  function getNeighbors(rarestWord, done) {
-    transformee = rarestWord;
-    var words = [addWordTable.roll(), transformee];
-    // console.log('words', words);
-    getWord2VecNeighbors(words, done);
-  }
-
-  function pickNeighbors(neighbors, done) {
-    if (!neighbors || neighbors.length < 1) {
-      callNextTick(done, new Error('No neighbors found.'));
-    }
-    else {
-      neighbors = neighbors.filter(doesNotContainTransformee);
-      var picked = neighbors[0];
-      if (probable.rollDie(2) === 0) {
-        picked = probable.pickFromArray(neighbors);
-      }
-      callNextTick(done, null, picked);
-    }
-  }
-
-  function doesNotContainTransformee(word) {
-    return word.indexOf(transformee) === -1;
-  }
-
-  function composeMessage(transformed, done) {
-    callNextTick(done, null, formatMessage(transformee, transformed));
   }
 
   function postTweet(text, done) {
