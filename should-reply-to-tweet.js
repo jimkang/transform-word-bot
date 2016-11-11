@@ -2,6 +2,9 @@ var callNextTick = require('call-next-tick');
 var betterKnowATweet = require('better-know-a-tweet');
 var async = require('async');
 var behavior = require('./behavior');
+var EphemeralReplyCounter = require('./ephemeral-reply-counter');
+
+  var replyCounter = EphemeralReplyCounter({expirationTimeInSeconds: 5 * 60});
 
 // Passes an error if you should not reply.
 function shouldReplyToTweet(opts, done) {

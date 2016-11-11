@@ -32,7 +32,7 @@ make-data-dir:
 	$(SSHCMD) "mkdir -p $(APPDIR)/data"
 
 test:
-	node tests/get-seance-topic-tests.js
+	node tests/ephemeral-reply-counter-tests.js
 
 followback:
 	node followback.js

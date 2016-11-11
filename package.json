@@ -19,7 +19,7 @@
   "homepage": "https://github.com/jimkang/transform-word-bot",
   "devDependencies": {
     "eslint": "^3.9.1",
-    "tape": "^3.0.3"
+    "tape": "^3.6.1"
   },
   "dependencies": {
     "async": "^1.5.2",
