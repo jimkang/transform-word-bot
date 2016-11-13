@@ -87,7 +87,14 @@ function respondToTweet(tweet) {
   }
 
   function getTransformee(done) {
-    getRarestWordFromText({wordnok: wordnok, text: tweet.text}, done);
+    var doNotPick = behavior.doNotUseWordsForScreenNames[tweet.user.screen_name];
+
+    getRarestWordFromText(
+      {
+        wordnok: wordnok, text: tweet.text, doNotPick: doNotPick
+      },
+      done
+    );
   }
 
   function postTweet(text, done) {

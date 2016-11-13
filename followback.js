@@ -1,3 +1,5 @@
+/* global process */
+
 var filteredFollowback = require('filtered-followback');
 
 var configName;

@@ -5,13 +5,15 @@ var getWorthwhileWordsFromText = require('./get-worthwhile-words-from-text');
 function getRarestWordFromText(opts, done) {
   var wordnok;
   var text;
+  var doNotPick;
 
   if (opts) {
     wordnok = opts.wordnok;
     text = opts.text;
+    doNotPick = opts.doNotPick;
   }
 
-  var words = getWorthwhileWordsFromText(text);
+  var words = getWorthwhileWordsFromText(text, doNotPick);
 
   if (words.length < 1) {
     wordnok.getTopic(done);
