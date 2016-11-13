@@ -11,7 +11,11 @@ var behavior = {
       'magical',
       'it',
       'is',
-      'now'
+      'now',
+      'huh',
+      'eh',
+      'ba',
+      'boom'
     ],
     improvebot: [
       'OK',
