@@ -8,12 +8,12 @@ var magicDings = ['✨', '🌟', '️⚡', '✨', '🌟', '⚡', '💥', '🔥',
 function formatMessage(transformee, transformed) {
   var dings = '';
   if (probable.roll(3) === 0) {
-    dings = range(3 + probable.roll(7)).map(randomDing).join('') + ' ';
+    dings = range(3 + probable.roll(7)).map(randomDing).join('');
   }
 
   var message = probable.pickFromArray([
-    `Let us make "${transformee}" magical! ${dings}It is now: ${transformed}!`,
-    `Huh, "${transformee}", eh? BA-BOOM! ${dings}Now it is: ${transformed}!`,
+    `Let us make "${transformee}" magical!\n${dings}\nIt is now: ${transformed}!`,
+    `Huh, "${transformee}", eh?\nBA-BOOM! ${dings}\mNow it is: ${transformed}!`,
   ]);
 
   return message;

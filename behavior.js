@@ -3,6 +3,7 @@ var behavior = {
   counterExpirationSeconds: 5 * 60,
   maxRepliesInCounterLifetime: 2,
   secondsToWaitBetweenChimeIns: 12 * 60 * 60,
+  maxNumberOfTimesToTalkAboutTopicPerUser: 3,
   doNotUseWordsForScreenNames: {
     magicapplier: [
       'let',

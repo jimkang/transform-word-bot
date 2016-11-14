@@ -18,17 +18,6 @@ function shouldReplyToTweet(opts, done) {
     recentReplyCounter = opts.recentReplyCounter;
   }
 
-  // var tweetLocale = 'en';
-  // if (tweet.lang) {
-  //   tweetLocale = tweet.lang;
-  // }
-
-  // if (tweetLocale !== 'en') {
-  //   // Not going to get good word2vec results.
-  //   callNextTick(done, new Error('No English input.'));
-  //   return;
-  // }
-
   if (tweet.user.screen_name === config.username) {
     callNextTick(done, new Error('Subject tweet is own tweet.'));
     return;

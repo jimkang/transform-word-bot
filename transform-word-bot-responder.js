@@ -18,7 +18,7 @@ var config = require('./config/' + configName + '-config');
 var callNextTick = require('call-next-tick');
 var Twit = require('twit');
 var async = require('async');
-var createChronicler = require('basicset-chronicler').createChronicler;
+var createChronicler = require('basicset-chronicler');
 var seedrandom = require('seedrandom');
 var createProbable = require('probable').createProbable;
 var createWordnok = require('wordnok').createWordnok;
@@ -64,10 +64,14 @@ var stream = twit.stream('user', streamOpts);
 stream.on('tweet', respondToTweet);
 
 function respondToTweet(tweet) {
+  var topic;
+
   async.waterfall(
     [
       checkIfWeShouldReply,
       getTransformee,
+      saveTopic,
+      checkNumberOfTimesTopicHasBeenDiscussedForUser,
       getTransformationText,
       postTweet,
       recordThatReplyHappened
@@ -97,6 +101,31 @@ function respondToTweet(tweet) {
     );
   }
 
+  function saveTopic(transformee, done) {
+    topic = transformee;
+    callNextTick(done, null, topic);
+  }
+
+  function checkNumberOfTimesTopicHasBeenDiscussedForUser(topic, done) {
+    chronicler.timesTopicWasUsedInReplyToUser(topic, tweet.user.id_str, checkCount);
+
+    function checkCount(error, count) {
+      if (error) {
+        done(error);
+      }
+      else {
+        if (count >= behavior.maxNumberOfTimesToTalkAboutTopicPerUser) {
+          var errorMessage = 'Already discussed ' + topic + ' with ' +
+            tweet.user.screen_name + ' ' + count + 'times.';
+          done(new Error(errorMessage));
+        }
+        else {
+          done(null, topic);
+        }
+      }
+    }
+  }
+
   function postTweet(text, done) {
     text = '@' + tweet.user.screen_name + ' ' + text;
 
@@ -123,7 +152,7 @@ function respondToTweet(tweet) {
     recentReplyCounter.incrementForKey(tweet.user.screen_name);
     // TODO: recordThatUserWasRepliedTo should be async.
     chronicler.recordThatUserWasRepliedTo(tweet.user.id_str);
-    callNextTick(done);
+    chronicler.recordThatTopicWasUsedInReplyToUser(topic, tweet.user.id_str, done);
   }
 }
 
