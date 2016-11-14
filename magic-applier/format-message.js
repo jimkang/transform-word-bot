@@ -13,7 +13,7 @@ function formatMessage(transformee, transformed) {
 
   var message = probable.pickFromArray([
     `Let us make "${transformee}" magical!\n${dings}\nIt is now: ${transformed}!`,
-    `Huh, "${transformee}", eh?\nBA-BOOM! ${dings}\mNow it is: ${transformed}!`,
+    `Huh, "${transformee}", eh?\nBA-BOOM! ${dings}\nNow it is: ${transformed}!`,
   ]);
 
   return message;
