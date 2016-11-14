@@ -1,7 +1,13 @@
 var behavior = {
   secondsToWaitBetweenRepliesToSameUser: 20,
   counterExpirationSeconds: 5 * 60,
-  maxRepliesInCounterLifetime: 2,
+  maxRepliesInCounterLifetime: 10,
+  maxLimitedRepliesInCounterLifetime: 1,
+  limitedRepliesScreenNames: [
+    'magicapplier',
+    'improvebot',
+    'cleromancer'
+  ],
   secondsToWaitBetweenChimeIns: 12 * 60 * 60,
   maxNumberOfTimesToTalkAboutTopicPerUser: 3,
   doNotUseWordsForScreenNames: {

@@ -35,8 +35,14 @@ function shouldReplyToTweet(opts, done) {
     waitingPeriod = behavior.secondsToWaitBetweenChimeIns;
   }
   else if (tweetMentionsBot) {
+    var maxRepliesInCounterLifetime = behavior.maxRepliesInCounterLifetime;
+
+    if (behavior.limitedRepliesScreenNames.indexOf(tweet.user.screen_name) !== -1) {
+      maxRepliesInCounterLifetime = behavior.maxLimitedRepliesInCounterLifetime;
+    }
+
     if (recentReplyCounter.getCountForKey(tweet.user.screen_name) >=
-      behavior.maxRepliesInCounterLifetime) {
+      maxRepliesInCounterLifetime) {
 
       callNextTick(
         done, new Error('Already replied enough recently to ' + tweet.user.screen_name)
