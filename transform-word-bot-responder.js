@@ -84,7 +84,8 @@ function respondToTweet(tweet) {
       tweet: tweet,
       chronicler: chronicler,
       recentReplyCounter: recentReplyCounter,
-      config: config
+      config: config,
+      probable: probable
     };
     // console.log('Checking tweet from', tweet.user.screen_name);
     shouldReplyToTweet(opts, done);

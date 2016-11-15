@@ -10,12 +10,14 @@ function shouldReplyToTweet(opts, done) {
   var waitingPeriod;
   var config;
   var recentReplyCounter;
+  var probable;
 
   if (opts) {
     tweet = opts.tweet;
     chronicler = opts.chronicler;
     config = opts.config;
     recentReplyCounter = opts.recentReplyCounter;
+    probable = opts.probable;
   }
 
   if (tweet.user.screen_name === config.username) {
@@ -39,6 +41,10 @@ function shouldReplyToTweet(opts, done) {
 
     if (behavior.limitedRepliesScreenNames.indexOf(tweet.user.screen_name) !== -1) {
       maxRepliesInCounterLifetime = behavior.maxLimitedRepliesInCounterLifetime;
+
+      if (probable.rollDie(100) > behavior.chanceOfReplyingToLimitedReplyUser) {
+        maxRepliesInCounterLifetime = 0;
+      }
     }
 
     if (recentReplyCounter.getCountForKey(tweet.user.screen_name) >=
