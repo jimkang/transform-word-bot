@@ -9,7 +9,7 @@ var behavior = {
     'cleromancer',
     'godtributes'
   ],
-  chanceOfReplyingToLimitedReplyUser: 50,
+  chanceOfReplyingToLimitedReplyUser: 10,
   secondsToWaitBetweenChimeIns: 12 * 60 * 60,
   maxNumberOfTimesToTalkAboutTopicPerUser: 3,
   doNotUseWordsForScreenNames: {
