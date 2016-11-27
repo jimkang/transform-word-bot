@@ -14,13 +14,14 @@ filteredFollowback(
   {
     twitterCreds: config.twitter,
     neverUnfollow: [
-      '724041937901228000', // magicapplier
-      '3236234039', // atyrannyofwords
-      '3305536529', // dungeon_junk
-      '3317221923', // future_junk
-      '3352995195', // space_stories
-      '3304189373', // robotrecipes
-      '3158440414', // monstersubtypes
+      724041937901228000, // magicapplier
+      3236234039, // atyrannyofwords
+      3305536529, // dungeon_junk
+      3317221923, // future_junk
+      3352995195, // space_stories
+      3304189373, // robotrecipes
+      3158440414, // monstersubtypes
+      3293239484 // cryptbooks
     ]
   },
   reportResults
