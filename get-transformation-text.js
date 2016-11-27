@@ -2,6 +2,8 @@ var callNextTick = require('call-next-tick');
 var async = require('async');
 var GetWord2VecNeighbors = require('get-w2v-google-news-neighbors');
 var nounfinder = require('nounfinder');
+var createIsCool = require('iscool');
+var iscool = createIsCool();
 
 function createIndexPickTableDef(arraySize) {
   var def = [];
@@ -55,6 +57,7 @@ function GetTransformationText({
       }
       else {
         neighbors = neighbors.filter(doesNotContainTransformee);
+        neighbors = neighbors.filter(iscool);
 
         var tableDef = createIndexPickTableDef(neighbors.length);
         var pickedIndex = probable.createTableFromSizes(tableDef).roll();
