@@ -7,9 +7,10 @@ var behavior = {
     'magicapplier',
     'improvebot',
     'cleromancer',
-    'godtributes'
+    'godtributes',
+    'cryptbooks'
   ],
-  chanceOfReplyingToLimitedReplyUser: 10,
+  chanceOfReplyingToLimitedReplyUser: 5,
   secondsToWaitBetweenChimeIns: 12 * 60 * 60,
   maxNumberOfTimesToTalkAboutTopicPerUser: 3,
   doNotUseWordsForScreenNames: {
