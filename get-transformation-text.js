@@ -3,6 +3,16 @@ var async = require('async');
 var GetWord2VecNeighbors = require('get-w2v-google-news-neighbors');
 var nounfinder = require('nounfinder');
 
+function createIndexPickTableDef(arraySize) {
+  var def = [];
+
+  for (var i = 0; i < arraySize; ++i) {
+    def.push([arraySize - i, i]);
+  }
+
+  return def;
+}
+
 function GetTransformationText({
   probable, gnewsWord2VecURL, configName, wordnok
   }) {
@@ -45,16 +55,16 @@ function GetTransformationText({
       }
       else {
         neighbors = neighbors.filter(doesNotContainTransformee);
-        var picked = neighbors[0];
-        if (probable.rollDie(2) === 0) {
-          picked = probable.pickFromArray(neighbors);
-        }
+
+        var tableDef = createIndexPickTableDef(neighbors.length);
+        var pickedIndex = probable.createTableFromSizes(tableDef).roll();
+        var picked = neighbors[pickedIndex];
         callNextTick(done, null, picked);
       }
     }
 
     function doesNotContainTransformee(word) {
-      return word.indexOf(transformee) === -1;
+      return word.indexOf(transformee) === -1 && word.indexOf(word + 's') === -1;
     }
 
     function composeMessage(transformed, done) {
