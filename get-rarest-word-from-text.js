@@ -1,5 +1,4 @@
 var callNextTick = require('call-next-tick');
-var probable = require('probable');
 var getWorthwhileWordsFromText = require('./get-worthwhile-words-from-text');
 
 function getRarestWordFromText(opts, done) {
@@ -22,11 +21,6 @@ function getRarestWordFromText(opts, done) {
 
   if (words.length === 1) {
     callNextTick(done, null, words[0]);
-    return;
-  }
-
-  if (probable.roll(3) === 0) {
-    callNextTick(done, null, probable.pickFromArray(words));
     return;
   }
 

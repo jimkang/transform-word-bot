@@ -36,6 +36,8 @@ make-data-dir:
 
 test:
 	node tests/ephemeral-reply-counter-tests.js
+	node tests/get-rarest-word-tests.js
+	node tests/do-not-pick-tests.js
 
 followback:
 	node followback.js
