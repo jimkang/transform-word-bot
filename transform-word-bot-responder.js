@@ -3,6 +3,7 @@
 /* global process __dirname */
 
 var configName = 'magic-applier';
+var hasLowerCaseRegex = /[a-z]/;
 
 var dryRun = false;
 if (process.argv.length > 3) {
@@ -104,6 +105,9 @@ function respondToTweet(tweet) {
 
   function saveTopic(transformee, done) {
     topic = transformee;
+    if (topic.match(hasLowerCaseRegex) === null) {
+      topic = topic.toLowerCase();
+    }
     callNextTick(done, null, topic);
   }
 
