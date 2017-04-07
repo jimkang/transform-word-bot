@@ -30,7 +30,7 @@
     "d3-array": "^1.0.1",
     "filtered-followback": "^1.3.5",
     "get-w2v-google-news-neighbors": "^1.1.0",
-    "iscool": "^1.1.28",
+    "iscool": "^1.1.33",
     "lodash": "^3.10.1",
     "nounfinder": "^2.0.3",
     "probable": "^2.1.0",
