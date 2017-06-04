@@ -33,10 +33,10 @@ check-log:
 	$(SSHCMD) "journalctl -u $(PROJECTNAME)"
 
 update-iscool:
-        git pull origin master && \
-                npm update --save iscool && \
-                git commit -a -m"Updated iscool." && \
-                make pushall
+	git pull origin master && \
+		npm update --save iscool && \
+		git commit -a -m"Updated iscool." && \
+		make pushall
 
 make-data-dir:
 	$(SSHCMD) "mkdir -p $(APPDIR)/data"
