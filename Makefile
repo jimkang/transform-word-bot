@@ -7,8 +7,12 @@ SSHCMD = ssh $(USER)@$(SERVER)
 PRIVSSHCMD = ssh $(PRIVUSER)@$(SERVER)
 APPDIR = /opt/transform-word-bot
 
+# It's just improvebot now. RIP magic-applier.
 pushall:
-	make sync && PROJECTNAME=improvebot make update-remote && PROJECTNAME=magic-applier make update-remote && git push origin master
+	PROJECTNAME=improvebot make stop && \
+	make sync && \
+	git push origin master && \
+	PROJECTNAME=improvebot make start
 
 sync:
 	rsync -a $(HOMEDIR) $(USER)@$(SERVER):/opt/ --exclude node_modules/ --exclude data/
@@ -21,6 +25,9 @@ restart-remote:
 
 stop:
 	$(PRIVSSHCMD) "service $(PROJECTNAME) stop"
+
+start:
+	$(PRIVSSHCMD) "service $(PROJECTNAME) start"
 
 install-service:
 	$(PRIVSSHCMD) "cp $(APPDIR)/$(PROJECTNAME).service /etc/systemd/system && \
