@@ -6,13 +6,14 @@ SERVER = smidgeo
 SSHCMD = ssh $(USER)@$(SERVER)
 PRIVSSHCMD = ssh $(PRIVUSER)@$(SERVER)
 APPDIR = /opt/transform-word-bot
-
 # It's just improvebot now. RIP magic-applier.
+PROJECTNAME=improvebot 
+
 pushall:
-	PROJECTNAME=improvebot make stop && \
+	make stop && \
 	make sync && \
 	git push origin master && \
-	PROJECTNAME=improvebot make start
+	make start
 
 sync:
 	rsync -a $(HOMEDIR) $(USER)@$(SERVER):/opt/ --exclude node_modules/ --exclude data/
@@ -56,8 +57,8 @@ test:
 followback:
 	node followback.js
 
-tweet-unprompted:
-	node tweet-seance.js
-
 prettier:
 	prettier --single-quote --write "**/*.js"
+
+post-transformation:
+	node post-transformation.js improvebot
