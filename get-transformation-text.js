@@ -16,9 +16,11 @@ function createIndexPickTableDef(arraySize) {
 }
 
 function GetTransformationText({
-  probable, gnewsWord2VecURL, configName, wordnok
-  }) {
-
+  probable,
+  gnewsWord2VecURL,
+  configName,
+  wordnok
+}) {
   var addWordTableDef = require('./' + configName + '/add-word-table-def');
   var formatMessage = require('./' + configName + '/format-message');
   var addWordTable = probable.createTableFromSizes(addWordTableDef);
@@ -36,14 +38,7 @@ function GetTransformationText({
   return getTransformationText;
 
   function getTransformationText(transformee, done) {
-    async.waterfall(
-      [
-        getNeighbors,
-        pickNeighbors,
-        composeMessage,
-      ],
-      done
-    );
+    async.waterfall([getNeighbors, pickNeighbors, composeMessage], done);
 
     function getNeighbors(done) {
       var words = [addWordTable.roll(), transformee];
@@ -54,8 +49,7 @@ function GetTransformationText({
     function pickNeighbors(neighbors, done) {
       if (!neighbors || neighbors.length < 1) {
         callNextTick(done, new Error('No neighbors found.'));
-      }
-      else {
+      } else {
         neighbors = neighbors.filter(doesNotContainTransformee);
         neighbors = neighbors.filter(iscool);
 
@@ -67,7 +61,9 @@ function GetTransformationText({
     }
 
     function doesNotContainTransformee(word) {
-      return word.indexOf(transformee) === -1 && word.indexOf(word + 's') === -1;
+      return (
+        word.indexOf(transformee) === -1 && word.indexOf(word + 's') === -1
+      );
     }
 
     function composeMessage(transformed, done) {

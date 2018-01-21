@@ -32,8 +32,7 @@ function getRarestWordFromText(opts, done) {
 
     if (error) {
       done(error);
-    }
-    else {
+    } else {
       frequencies.forEach(saveRarest);
       done(null, rarestWord);
     }
@@ -47,7 +46,7 @@ function getRarestWordFromText(opts, done) {
         rarestFrequency = freq;
         rarestWord = words[i];
       }
-    }    
+    }
   }
 }
 

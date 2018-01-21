@@ -13,7 +13,7 @@ var numberOfTries = 0;
 var maxTries = 5;
 
 if (process.argv.length > 3) {
-  dryRun = (process.argv[3].toLowerCase() == '--dry');
+  dryRun = process.argv[3].toLowerCase() == '--dry';
 }
 
 if (process.argv.length > 2) {
@@ -22,7 +22,7 @@ if (process.argv.length > 2) {
 
 var config = require('./config/' + configName + '-config');
 
-var seed = (new Date()).toISOString();
+var seed = new Date().toISOString();
 console.log('seed:', seed);
 
 var random = seedrandom(seed);
@@ -46,12 +46,7 @@ var twit = new Twit(config.twitter);
 
 function tryToPostTransformation() {
   async.waterfall(
-    [
-      getTopics,
-      pickFirst,
-      getTransformationText,
-      postTweet,
-    ],
+    [getTopics, pickFirst, getTransformationText, postTweet],
     wrapUp
   );
 }
@@ -63,14 +58,13 @@ function getTopics(done) {
       limit: 1
     }
   };
-  wordnok.getRandomWords(opts, done);  
+  wordnok.getRandomWords(opts, done);
 }
 
 function pickFirst(words, done) {
   if (words.length < 1) {
     callNextTick(done, new Error('No topics found.'));
-  }
-  else {
+  } else {
     callNextTick(done, null, words[0]);
   }
 }
@@ -80,12 +74,11 @@ function postTweet(text, done) {
     console.log('Would have tweeted:', text);
     var mockTweetData = {
       user: {
-        id_str: 'mockuser',        
+        id_str: 'mockuser'
       }
     };
     callNextTick(done, null, mockTweetData);
-  }
-  else {
+  } else {
     var body = {
       status: text
     };
@@ -107,8 +100,7 @@ function wrapUp(error, data) {
       console.log('Tried', numberOfTries, 'so far. retrying.');
       callNextTick(tryToPostTransformation);
     }
-  }
-  else {
+  } else {
     console.log('post-transformation complete.');
   }
 }

@@ -11,15 +11,7 @@ var wordnok = createWordnok({
 var opts = {
   wordnok: wordnok,
   text: 'Let us make relinquishment magical! It is now: samsara!',
-  doNotPick: [
-    'let',
-    'us',
-    'make',
-    'magical',
-    'it',
-    'is',
-    'now'
-  ]
+  doNotPick: ['let', 'us', 'make', 'magical', 'it', 'is', 'now']
 };
 
 for (var i = 0; i < 20; ++i) {

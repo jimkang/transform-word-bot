@@ -29,7 +29,7 @@ var behavior = {
     ],
     improvebot: [
       'OK',
-      'i\'m',
+      "i'm",
       'improving',
       'for',
       'you',
@@ -51,7 +51,7 @@ var behavior = {
       'am',
       'reforging'
     ]
-  },
+  }
 };
 
 module.exports = behavior;

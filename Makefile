@@ -59,5 +59,5 @@ followback:
 tweet-unprompted:
 	node tweet-seance.js
 
-lint:
-	eslint .
+prettier:
+	prettier --single-quote --write "**/*.js"

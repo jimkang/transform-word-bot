@@ -4,7 +4,7 @@ var EphemeralReplyCounter = require('../ephemeral-reply-counter');
 test('EphemeralReplyCounter test', theTest);
 
 function theTest(t) {
-  var counter = EphemeralReplyCounter({expirationTimeInSeconds: 2});
+  var counter = EphemeralReplyCounter({ expirationTimeInSeconds: 2 });
 
   counter.incrementForKey('a');
   counter.incrementForKey('b');
@@ -14,20 +14,40 @@ function theTest(t) {
 
   counter.incrementForKey('b');
 
-  t.equal(counter.getCountForKey('b'), 2, 'Count for b is correct, post-increment.');
+  t.equal(
+    counter.getCountForKey('b'),
+    2,
+    'Count for b is correct, post-increment.'
+  );
 
   for (var i = 0; i < 3; ++i) {
     counter.incrementForKey('c');
   }
 
-  t.equal(counter.getCountForKey('c'), 3, 'Count for c is correct, post-increment.');
+  t.equal(
+    counter.getCountForKey('c'),
+    3,
+    'Count for c is correct, post-increment.'
+  );
 
   setTimeout(checkAfterFirstExpiration, 2000);
 
   function checkAfterFirstExpiration() {
-    t.equal(counter.getCountForKey('a'), 0, 'Count for a is correct, post-expiration.');
-    t.equal(counter.getCountForKey('b'), 0, 'Count for b is correct, post-expiration.');
-    t.equal(counter.getCountForKey('c'), 0, 'Count for c is correct, post-expiration.');
+    t.equal(
+      counter.getCountForKey('a'),
+      0,
+      'Count for a is correct, post-expiration.'
+    );
+    t.equal(
+      counter.getCountForKey('b'),
+      0,
+      'Count for b is correct, post-expiration.'
+    );
+    t.equal(
+      counter.getCountForKey('c'),
+      0,
+      'Count for c is correct, post-expiration.'
+    );
 
     counter.incrementForKey('a');
     t.equal(counter.getCountForKey('a'), 1, 'Count for a is correct.');
@@ -50,10 +70,26 @@ function theTest(t) {
   }
 
   function checkAfterSecondExpiration() {
-    t.equal(counter.getCountForKey('a'), 0, 'Count for a is correct, post-expiration.');
-    t.equal(counter.getCountForKey('b'), 0, 'Count for b is correct, post-expiration.');
-    t.equal(counter.getCountForKey('c'), 0, 'Count for c is correct, post-expiration.');
-    t.equal(counter.getCountForKey('d'), 0, 'Count for d is correct, post-expiration.');    
+    t.equal(
+      counter.getCountForKey('a'),
+      0,
+      'Count for a is correct, post-expiration.'
+    );
+    t.equal(
+      counter.getCountForKey('b'),
+      0,
+      'Count for b is correct, post-expiration.'
+    );
+    t.equal(
+      counter.getCountForKey('c'),
+      0,
+      'Count for c is correct, post-expiration.'
+    );
+    t.equal(
+      counter.getCountForKey('d'),
+      0,
+      'Count for d is correct, post-expiration.'
+    );
 
     for (let i = 0; i < 13; ++i) {
       counter.incrementForKey('x');

@@ -1,4 +1,4 @@
-function EphemeralReplyCounter({expirationTimeInSeconds}) {
+function EphemeralReplyCounter({ expirationTimeInSeconds }) {
   var currentCounter;
 
   resetCounter();
@@ -34,8 +34,7 @@ function ActualReplyCounter() {
     var count;
     if (key in countsForKeys) {
       count = countsForKeys[key];
-    }
-    else {
+    } else {
       count = 0;
     }
 

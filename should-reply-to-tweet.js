@@ -35,11 +35,12 @@ function shouldReplyToTweet(opts, done) {
   if (!tweetMentionsBot) {
     // Chiming in.
     waitingPeriod = behavior.secondsToWaitBetweenChimeIns;
-  }
-  else if (tweetMentionsBot) {
+  } else if (tweetMentionsBot) {
     var maxRepliesInCounterLifetime = behavior.maxRepliesInCounterLifetime;
 
-    if (behavior.limitedRepliesScreenNames.indexOf(tweet.user.screen_name) !== -1) {
+    if (
+      behavior.limitedRepliesScreenNames.indexOf(tweet.user.screen_name) !== -1
+    ) {
       maxRepliesInCounterLifetime = behavior.maxLimitedRepliesInCounterLifetime;
 
       if (probable.rollDie(100) > behavior.chanceOfReplyingToLimitedReplyUser) {
@@ -47,31 +48,27 @@ function shouldReplyToTweet(opts, done) {
       }
     }
 
-    if (recentReplyCounter.getCountForKey(tweet.user.screen_name) >=
-      maxRepliesInCounterLifetime) {
-
+    if (
+      recentReplyCounter.getCountForKey(tweet.user.screen_name) >=
+      maxRepliesInCounterLifetime
+    ) {
       callNextTick(
-        done, new Error('Already replied enough recently to ' + tweet.user.screen_name)
+        done,
+        new Error(
+          'Already replied enough recently to ' + tweet.user.screen_name
+        )
       );
       return;
-    }
-    else {
+    } else {
       // Probably replying.
       waitingPeriod = behavior.secondsToWaitBetweenRepliesToSameUser;
     }
-  }
-  else {
+  } else {
     callNextTick(done, new Error('Not chiming in or replying.'));
     return;
   }
 
-  async.waterfall(
-    [
-      goFindLastReplyDate,
-      replyDateWasNotTooRecent
-    ],
-    done
-  );
+  async.waterfall([goFindLastReplyDate, replyDateWasNotTooRecent], done);
 
   function goFindLastReplyDate(done) {
     findLastReplyDateForUser(tweet, done);
@@ -79,7 +76,8 @@ function shouldReplyToTweet(opts, done) {
 
   function findLastReplyDateForUser(tweet, done) {
     chronicler.whenWasUserLastRepliedTo(
-      tweet.user.id.toString(), passLastReplyDate
+      tweet.user.id.toString(),
+      passLastReplyDate
     );
 
     function passLastReplyDate(error, date) {
@@ -101,20 +99,20 @@ function shouldReplyToTweet(opts, done) {
 
     if (secondsElapsed > waitingPeriod) {
       done();
-    }
-    else {
-      done(new Error(
-        `Replied ${secondsElapsed} seconds ago to ${tweet.user.screen_name}.
+    } else {
+      done(
+        new Error(
+          `Replied ${secondsElapsed} seconds ago to ${tweet.user.screen_name}.
         Need at least ${waitingPeriod} to pass.`
-      ));
+        )
+      );
     }
   }
 
   function doesTweetMentionBot(tweet) {
     var usernames = betterKnowATweet.whosInTheTweet(tweet);
     return usernames && usernames.indexOf(config.username) !== -1;
-  }  
+  }
 }
-
 
 module.exports = shouldReplyToTweet;

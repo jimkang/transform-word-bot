@@ -7,7 +7,7 @@ var hasLowerCaseRegex = /[a-z]/;
 
 var dryRun = false;
 if (process.argv.length > 3) {
-  dryRun = (process.argv[3].toLowerCase() == '--dry');
+  dryRun = process.argv[3].toLowerCase() == '--dry';
 }
 
 if (process.argv.length > 2) {
@@ -29,7 +29,7 @@ var GetTransformationText = require('./get-transformation-text');
 var EphemeralReplyCounter = require('./ephemeral-reply-counter');
 var behavior = require('./behavior');
 
-var seed = (new Date()).toISOString();
+var seed = new Date().toISOString();
 console.log('seed:', seed);
 var random = seedrandom(seed);
 
@@ -93,11 +93,14 @@ function respondToTweet(tweet) {
   }
 
   function getTransformee(done) {
-    var doNotPick = behavior.doNotUseWordsForScreenNames[tweet.user.screen_name];
+    var doNotPick =
+      behavior.doNotUseWordsForScreenNames[tweet.user.screen_name];
 
     getRarestWordFromText(
       {
-        wordnok: wordnok, text: tweet.text, doNotPick: doNotPick
+        wordnok: wordnok,
+        text: tweet.text,
+        doNotPick: doNotPick
       },
       done
     );
@@ -112,19 +115,27 @@ function respondToTweet(tweet) {
   }
 
   function checkNumberOfTimesTopicHasBeenDiscussedForUser(topic, done) {
-    chronicler.timesTopicWasUsedInReplyToUser(topic, tweet.user.id_str, checkCount);
+    chronicler.timesTopicWasUsedInReplyToUser(
+      topic,
+      tweet.user.id_str,
+      checkCount
+    );
 
     function checkCount(error, count) {
       if (error) {
         done(error);
-      }
-      else {
+      } else {
         if (count >= behavior.maxNumberOfTimesToTalkAboutTopicPerUser) {
-          var errorMessage = 'Already discussed ' + topic + ' with ' +
-            tweet.user.screen_name + ' ' + count + 'times.';
+          var errorMessage =
+            'Already discussed ' +
+            topic +
+            ' with ' +
+            tweet.user.screen_name +
+            ' ' +
+            count +
+            'times.';
           done(new Error(errorMessage));
-        }
-        else {
+        } else {
           done(null, topic);
         }
       }
@@ -138,12 +149,11 @@ function respondToTweet(tweet) {
       console.log('Would have tweeted:', text);
       var mockTweetData = {
         user: {
-          id_str: 'mockuser',        
+          id_str: 'mockuser'
         }
       };
       callNextTick(done, null, mockTweetData);
-    }
-    else {
+    } else {
       var body = {
         status: text,
         in_reply_to_status_id: tweet.id_str
@@ -157,7 +167,11 @@ function respondToTweet(tweet) {
     recentReplyCounter.incrementForKey(tweet.user.screen_name);
     // TODO: recordThatUserWasRepliedTo should be async.
     chronicler.recordThatUserWasRepliedTo(tweet.user.id_str);
-    chronicler.recordThatTopicWasUsedInReplyToUser(topic, tweet.user.id_str, done);
+    chronicler.recordThatTopicWasUsedInReplyToUser(
+      topic,
+      tweet.user.id_str,
+      done
+    );
   }
 }
 
