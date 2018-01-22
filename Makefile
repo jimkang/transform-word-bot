@@ -10,10 +10,8 @@ APPDIR = /opt/transform-word-bot
 PROJECTNAME=improvebot 
 
 pushall:
-	# make stop && \
 	make sync && \
-	git push origin master && \
-	# make start
+	git push origin master
 
 sync:
 	rsync -a $(HOMEDIR) $(USER)@$(SERVER):/opt/ --exclude node_modules/ --exclude data/
