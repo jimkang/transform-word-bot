@@ -24,7 +24,6 @@
   },
   "dependencies": {
     "async": "^1.5.2",
-    "basicset-chronicler": "^3.1.0",
     "better-know-a-tweet": "^1.0.2",
     "call-next-tick": "^1.1.2",
     "d3-array": "^1.0.1",

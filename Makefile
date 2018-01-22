@@ -10,10 +10,10 @@ APPDIR = /opt/transform-word-bot
 PROJECTNAME=improvebot 
 
 pushall:
-	make stop && \
+	# make stop && \
 	make sync && \
 	git push origin master && \
-	make start
+	# make start
 
 sync:
 	rsync -a $(HOMEDIR) $(USER)@$(SERVER):/opt/ --exclude node_modules/ --exclude data/
@@ -24,21 +24,21 @@ update-remote: sync restart-remote
 restart-remote:
 	$(PRIVSSHCMD) "service $(PROJECTNAME) restart"
 
-stop:
-	$(PRIVSSHCMD) "service $(PROJECTNAME) stop"
+# stop:
+# 	$(PRIVSSHCMD) "service $(PROJECTNAME) stop"
 
-start:
-	$(PRIVSSHCMD) "service $(PROJECTNAME) start"
+# start:
+# 	$(PRIVSSHCMD) "service $(PROJECTNAME) start"
 
-install-service:
-	$(PRIVSSHCMD) "cp $(APPDIR)/$(PROJECTNAME).service /etc/systemd/system && \
-	systemctl enable $(PROJECTNAME)"
+# install-service:
+# 	$(PRIVSSHCMD) "cp $(APPDIR)/$(PROJECTNAME).service /etc/systemd/system && \
+# 	systemctl enable $(PROJECTNAME)"
 
-check-status:
-	$(SSHCMD) "systemctl status $(PROJECTNAME)"
+# check-status:
+# 	$(SSHCMD) "systemctl status $(PROJECTNAME)"
 
-check-log:
-	$(SSHCMD) "journalctl -u $(PROJECTNAME)"
+# check-log:
+# 	$(SSHCMD) "journalctl -u $(PROJECTNAME)"
 
 update-iscool:
 	git pull origin master && \
